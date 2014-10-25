@@ -47,6 +47,7 @@ SlashCmdList["HEROICRAIDREADY"] = function()
 end
 
 function HeroicRaidReady:DisplayHeroicReadiness()
+    -- todo Group these by raid
     for _,achievementId in pairs(HeroicRaidReady.requiredAchievements) do
         local id, name, points, completed, month, day, year, description, flags, icon, rewardText,
             isGuildAch, wasEarnedByMe, earnedBy = GetAchievementInfo(achievementId)
