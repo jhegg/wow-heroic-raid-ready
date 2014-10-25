@@ -15,6 +15,9 @@ SlashCmdList["HEROICRAIDREADY"] = function()
 end
 
 function HeroicRaidReady:DisplayHeroicReadiness()
-    local _, Name, _, Completed = GetAchievementInfo(4842)
-    DEFAULT_CHAT_FRAME:AddMessage(format("%s -- %s", Name, Completed and "Ready!" or "Not ready."));
+    for _,achievementId in pairs(HeroicRaidReady.requiredAchievements) do
+        local id, name, points, completed, month, day, year, description, flags, icon, rewardText,
+            isGuildAch, wasEarnedByMe, earnedBy = GetAchievementInfo(achievementId)
+        DEFAULT_CHAT_FRAME:AddMessage(format("%s -- %s", name, wasEarnedByMe and "Ready!" or "Not ready."));
+    end
 end
