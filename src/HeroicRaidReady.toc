@@ -1,0 +1,7 @@
+## Interface: 60000
+## Title: HeroicRaidReady
+## Notes: Shows which raids your character can enter on Heroic difficulty.
+## Author: Marihk
+## Version: v1.0
+
+HeroicRaidReady.lua
