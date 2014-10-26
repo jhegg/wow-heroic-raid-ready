@@ -56,6 +56,14 @@ function HeroicRaidReady:DisplayHeroicReadiness()
     HeroicRaidReady.frame:Show();
 end
 
+local function OnMouseDown(self,button)
+    HeroicRaidReady.frame:StartMoving();
+end
+
+local function OnMouseUp(self,button)
+    HeroicRaidReady.frame:StopMovingOrSizing();
+end
+
 function HeroicRaidReady:CreateReadinessFrame()
     local frame = HeroicRaidReady:CreateMainFrame()
 
@@ -103,6 +111,8 @@ function HeroicRaidReady:CreateMainFrame()
     });
     frame:SetBackdropColor(0,0,0,1);
     frame:SetBackdropBorderColor(0.1,0.1,0.1,1);
+    frame:SetScript("OnMouseDown",OnMouseDown);
+    frame:SetScript("OnMouseUp",OnMouseUp);
     frame:Hide();
     return frame;
 end
