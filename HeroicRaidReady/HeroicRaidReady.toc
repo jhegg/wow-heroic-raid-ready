@@ -3,5 +3,12 @@
 ## Notes: Shows which raids your character can enter on Heroic difficulty (/heroicrr).
 ## Author: Marihk
 ## Version: v1.0
+## OptionalDeps: LibDBIcon-1.0
+
+lib\LibStub\Libstub.lua
+lib\CallbackHandler-1.0\CallbackHandler-1.0.lua
+lib\LibDataBroker-1.1\LibDataBroker-1.1.lua
+lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 
 HeroicRaidReady.lua
+HeroicRaidReady-LDB.lua

@@ -33,11 +33,11 @@ SLASH_HEROICRAIDREADY1 = "/heroicraidready";
 SLASH_HEROICRAIDREADY2 = "/heroicrr";
 
 SlashCmdList["HEROICRAIDREADY"] = function()
-    HeroicRaidReady:UpdateEntries();
     HeroicRaidReady:DisplayHeroicReadiness();
 end
 
 function HeroicRaidReady:DisplayHeroicReadiness()
+    HeroicRaidReady:UpdateEntries();
     HeroicRaidReady.frame:Show();
 end
 
