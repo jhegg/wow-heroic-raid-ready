@@ -163,6 +163,7 @@ function HeroicRaidReady:CreateEntries(frame)
     local i = 1;
     for _, achievementId in pairs(HeroicRaidReady.requiredAchievements) do
         local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(achievementId)
+        -- todo add the raid name to the achievement name, so the list makes more sense
         local raidEntry = CreateFrame("Button", nil, frame.outline);
         raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
         raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
@@ -177,14 +178,9 @@ function HeroicRaidReady:CreateEntries(frame)
             raidEntry:SetPoint("TOPRIGHT", entries[i - 1], "BOTTOMRIGHT", 0, -1);
         end
 
-        raidEntry.icon = raidEntry:CreateTexture(nil, "ARTWORK");
-        raidEntry.icon:SetPoint("TOPLEFT");
-        raidEntry.icon:SetPoint("BOTTOMLEFT");
-        raidEntry.icon:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
-        raidEntry.icon:SetTexCoord(0.07, 0.93, 0.07, 0.93);
-
         raidEntry.name = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
-        raidEntry.name:SetPoint("LEFT", raidEntry.icon, "RIGHT", 4, 0);
+        raidEntry.name:SetPoint("TOPLEFT");
+        raidEntry.name:SetPoint("BOTTOMLEFT");
         raidEntry.name:SetJustifyH("LEFT");
         raidEntry.name:SetText(name);
 
