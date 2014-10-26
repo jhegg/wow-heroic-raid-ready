@@ -27,7 +27,7 @@ HeroicRaidReady = {
         -- Expansion: Mists of Pandaria
         --6458, -- Mogu'shan Terrace: Guardians of Mogu'shan
         6844, -- Mogu'shan Terace: The Vault of Mysteries
-        6718, -- Heart of Fear: The Dread Approach
+        --6718, -- Heart of Fear: The Dread Approach
         6845, -- Heart of Fear: Nightmare of Shek'zeer
         6689, -- Terrace of Endless Spring
         -- Throne of Thunder - is not locked

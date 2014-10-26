@@ -22,6 +22,5 @@ The raids that are currently tracked are:
   * Mogu'Shan Terrace
     * Part 2 - The Vault of Mysteries (technically just Will of the Emperor)
   * Heart of Fear
-    * Part 1 - The Dread Approach
-    * Part 2 - Nightmare of Shek'zeer
+    * Part 2 - Nightmare of Shek'zeer (technically just Grand Empress Shek'zeer)
   * Terrace of Endless Spring
