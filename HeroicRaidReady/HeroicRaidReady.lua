@@ -50,12 +50,6 @@ SlashCmdList["HEROICRAIDREADY"] = function()
 end
 
 function HeroicRaidReady:DisplayHeroicReadiness()
-    -- todo Group these by raid
-    for _,achievementId in pairs(HeroicRaidReady.requiredAchievements) do
-        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(achievementId)
-        DEFAULT_CHAT_FRAME:AddMessage(format("%s -- %s", name, wasEarnedByMe and "Ready!" or "Not ready."));
-    end
-
     HeroicRaidReady.frame:Show();
 end
 
