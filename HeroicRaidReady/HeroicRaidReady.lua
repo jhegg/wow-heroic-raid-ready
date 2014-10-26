@@ -22,30 +22,31 @@ HeroicRaidReady = {
         4850, -- Bastion of Twilight
         4851, -- Throne of the Four Winds
         5802, -- Firelands
-        6106, -- Dragon Soul: Siege of Wyrmrest Temple (Part 1)
-        6107, -- Dragon Soul: Fall of Deathwing (Part 2)
+        --6106, -- Dragon Soul: Siege of Wyrmrest Temple (Part 1)
+        --6107, -- Dragon Soul: Fall of Deathwing (Part 2)
+        6177, -- Dragon Soul: Destroyer's End
 
         -- Expansion: Mists of Pandaria
-        6718, -- Heart of Fear: The Dread Approach
-        6845, -- Heart of Fear: Nightmare of Shek'zeer
         6458, -- Mogu'shan Vaults: Guardians of Mogu'shan
         6844, -- Mogu'shan Vaults: The Vault of Mysteries
+        6718, -- Heart of Fear: The Dread Approach
+        6845, -- Heart of Fear: Nightmare of Shek'zeer
         6689, -- Terrace of Endless Spring
-        8070, -- Throne of Thunder: Forgotten Depths
         8069, -- Throne of Thunder: Last Stand of the Zandalari
+        8070, -- Throne of Thunder: Forgotten Depths
         8071, -- Throne of Thunder: Halls of Flesh-Shaping
         8072, -- Throne of Thunder: Pinnacle of Storms
         -- Siege of Orgrimmar - is not locked
     },
-    NUM_ITEMS = 17,
-    ITEM_HEIGHT,
     frame = {},
+    ITEM_HEIGHT,
 }
 
 SLASH_HEROICRAIDREADY1 = "/heroicraidready";
 SLASH_HEROICRAIDREADY2 = "/heroicrr";
 
 SlashCmdList["HEROICRAIDREADY"] = function()
+    -- todo update the entries in case of new achievement progress
     HeroicRaidReady:DisplayHeroicReadiness();
 end
 
@@ -59,6 +60,14 @@ end
 
 local function OnMouseUp(self,button)
     HeroicRaidReady.frame:StopMovingOrSizing();
+end
+
+local function TableLength(T)
+    local count = 0
+    for _ in pairs(T) do
+        count = count + 1
+    end
+    return count
 end
 
 function HeroicRaidReady:CreateReadinessFrame()
@@ -136,7 +145,8 @@ function HeroicRaidReady:CreateFrameOutline(frame)
     frame.outline:SetBackdropBorderColor(0.8,0.8,0.9,0.4);
     frame.outline:SetPoint("TOPLEFT",12,-38);
     frame.outline:SetPoint("BOTTOMRIGHT",-12,42);
-    HeroicRaidReady.ITEM_HEIGHT = (frame.outline:GetHeight() - 16) / HeroicRaidReady.NUM_ITEMS - 1;
+    HeroicRaidReady.ITEM_HEIGHT =
+        (frame.outline:GetHeight() - 16) / TableLength(HeroicRaidReady.requiredAchievements) - 1;
     return frame.outline;
 end
 
