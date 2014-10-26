@@ -2,18 +2,12 @@ HeroicRaidReady = {
     name = "HeroicRaidReady",
     requiredAchievements = {
         -- Expansion: Wrath of the Lich King
-        -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H/25H?
-        -- todo And can you just do 25N to access both 10H/25H?
-        --4531, -- Icecrown Citadel 10: Storming the Citadel
-        --4529, -- Icecrown Citadel 10: The Crimson Hall
-        --4527, -- Icecrown Citadel 10: The Frostwing Hallsy
-        --4528, -- Icecrown Citadel 10: The Plagueworks
-        4530, -- Icecrown Citadel 10: The Frozen Throne
-        --4604, -- Icecrown Citadel 25: Storming the Citadel
-        --4606, -- Icecrown Citadel 25: The Crimson Hall
-        --4607, -- Icecrown Citadel 25: The Frostwing Halls
-        --4605, -- Icecrown Citadel 25: The Plagueworks
-        4597, -- Icecrown Citadel 25: The Frozen Throne
+        -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H?
+        -- We found out that you must do 25N to do 25H, and 10N to do 10H, they are separate lockouts.
+        --{achievementId = 4530, zoneName = "Icecrown Citadel"}, -- Icecrown Citadel 10: The Frozen Throne
+        --{achievementId = 4597, zoneName = "Icecrown Citadel"}, -- Icecrown Citadel 25: The Frozen Throne
+        4530,
+        4597,
 
         -- Expansion: Cataclysm
         4842, -- Blackwing Descent
