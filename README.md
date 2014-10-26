@@ -28,7 +28,8 @@ Note that only certain raids have entrance restrictions. The raids that are curr
 ## How do I use it?
 
 Use the slash command /heroicrr or /heroicraidready, and the addon will display which Heroic raids are ready
-(or not ready).
+(or not ready). Or, if you have a LibDataBroker-enabled addon such as TitanPanel or Bazooka, a clickable icon
+should show up on the panel/bar.
 
 ## Why would I use this?
 
