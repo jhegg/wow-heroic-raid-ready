@@ -46,7 +46,7 @@ SLASH_HEROICRAIDREADY1 = "/heroicraidready";
 SLASH_HEROICRAIDREADY2 = "/heroicrr";
 
 SlashCmdList["HEROICRAIDREADY"] = function()
-    -- todo update the entries in case of new achievement progress
+    HeroicRaidReady:UpdateEntries();
     HeroicRaidReady:DisplayHeroicReadiness();
 end
 
@@ -169,7 +169,6 @@ function HeroicRaidReady:CreateEntries(frame)
     for _, achievementId in pairs(HeroicRaidReady.requiredAchievements) do
         local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(achievementId)
         local raidEntry = CreateFrame("Button", nil, frame.outline);
-
         raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
         raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
         raidEntry:RegisterForClicks("AnyUp");
@@ -208,10 +207,27 @@ function HeroicRaidReady:CreateEntries(frame)
             raidEntry.value:SetTextColor(1.0, 0, 0);
         end
 
+        raidEntry.achievementId = achievementId;
+
         entries[i] = raidEntry;
         i = i + 1;
     end
     return entries;
+end
+
+function HeroicRaidReady:UpdateEntries()
+    for _, raidEntry in pairs(HeroicRaidReady.frame.entries) do
+        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raidEntry.achievementId)
+        raidEntry.name:SetText(name);
+        raidEntry.value:SetText(format("%s", wasEarnedByMe and "Ready!" or "Not ready."));
+        if (wasEarnedByMe) then
+            raidEntry.name:SetTextColor(0, 1.0, 0);
+            raidEntry.value:SetTextColor(0, 1.0, 0);
+        else
+            raidEntry.name:SetTextColor(1.0, 0, 0);
+            raidEntry.value:SetTextColor(1.0, 0, 0);
+        end
+    end
 end
 
 HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
