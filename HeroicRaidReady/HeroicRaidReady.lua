@@ -30,10 +30,7 @@ HeroicRaidReady = {
         6718, -- Heart of Fear: The Dread Approach
         6845, -- Heart of Fear: Nightmare of Shek'zeer
         6689, -- Terrace of Endless Spring
-        8069, -- Throne of Thunder: Last Stand of the Zandalari
-        8070, -- Throne of Thunder: Forgotten Depths
-        8071, -- Throne of Thunder: Halls of Flesh-Shaping
-        8072, -- Throne of Thunder: Pinnacle of Storms
+        -- Throne of Thunder - is not locked
         -- Siege of Orgrimmar - is not locked
     },
     frame = {},

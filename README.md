@@ -26,8 +26,3 @@ The raids that are currently tracked are:
     * Part 1 - The Dread Approach
     * Part 2 - Nightmare of Shek'zeer
   * Terrace of Endless Spring
-  * Throne of Thunder
-    * Part 1 - Last Stand of the Zandalari
-    * Part 2 - Forgotten Depths
-    * Part 3 - Halls of Flesh-Shaping
-    * Part 4 - Pinnacle of Storms
