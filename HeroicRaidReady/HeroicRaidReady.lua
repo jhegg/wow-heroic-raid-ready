@@ -4,28 +4,26 @@ HeroicRaidReady = {
         -- Expansion: Wrath of the Lich King
         -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H?
         -- We found out that you must do 25N to do 25H, and 10N to do 10H, they are separate lockouts.
-        --{achievementId = 4530, zoneName = "Icecrown Citadel"}, -- Icecrown Citadel 10: The Frozen Throne
-        --{achievementId = 4597, zoneName = "Icecrown Citadel"}, -- Icecrown Citadel 25: The Frozen Throne
-        4530,
-        4597,
+        {achievementId = 4530, mapId = 604}, -- Icecrown Citadel 10: The Frozen Throne
+        {achievementId = 4597, mapId = 604}, -- Icecrown Citadel 25: The Frozen Throne
 
         -- Expansion: Cataclysm
-        4842, -- Blackwing Descent
-        4850, -- Bastion of Twilight
-        4851, -- Throne of the Four Winds
-        5802, -- Firelands
-        --6106, -- Dragon Soul: Siege of Wyrmrest Temple (Part 1)
-        --6107, -- Dragon Soul: Fall of Deathwing (Part 2)
-        6177, -- Dragon Soul: Destroyer's End
+        {achievementId = 4842, mapId = nil}, -- Blackwing Descent
+        {achievementId = 4850, mapId = nil}, -- Bastion of Twilight
+        {achievementId = 4851, mapId = nil}, -- Throne of the Four Winds
+        {achievementId = 5802, mapId = nil}, -- Firelands
+        {achievementId = 6177, mapId = 824}, -- Dragon Soul: Destroyer's End
 
         -- Expansion: Mists of Pandaria
-        --6458, -- Mogu'shan Terrace: Guardians of Mogu'shan
-        6844, -- Mogu'shan Terace: The Vault of Mysteries
-        --6718, -- Heart of Fear: The Dread Approach
-        6845, -- Heart of Fear: Nightmare of Shek'zeer
-        6689, -- Terrace of Endless Spring
+        {achievementId = 6844, mapId = 896}, -- Mogu'shan Vaults: The Vault of Mysteries
+        {achievementId = 6845, mapId = 897}, -- Heart of Fear: Nightmare of Shek'zeer
+        {achievementId = 6689, mapId = nil}, -- Terrace of Endless Spring
         -- Throne of Thunder - is not locked
         -- Siege of Orgrimmar - is not locked
+
+        -- Expansion: Warlords of Draenor
+        -- Highmaul - Mythic is locked, Heroic is not. Not sure how to determine a clear of Normal or Heroic yet.
+        -- Blackrock Foundry - Unsure on lockout status.
     },
     frame = {},
     ITEM_HEIGHT,
@@ -155,9 +153,14 @@ end
 function HeroicRaidReady:CreateEntries(frame)
     local entries = {};
     local i = 1;
-    for _, achievementId in pairs(HeroicRaidReady.requiredAchievements) do
-        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(achievementId)
-        -- todo add the raid name to the achievement name, so the list makes more sense
+    for _, raid in pairs(HeroicRaidReady.requiredAchievements) do
+        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raid.achievementId)
+        local raidName
+        if (raid.mapId) then
+            raidName = GetMapNameByID(raid.mapId).." - "..name
+        else
+            raidName = name
+        end
         local raidEntry = CreateFrame("Button", nil, frame.outline);
         raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
         raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
@@ -176,7 +179,7 @@ function HeroicRaidReady:CreateEntries(frame)
         raidEntry.name:SetPoint("TOPLEFT");
         raidEntry.name:SetPoint("BOTTOMLEFT");
         raidEntry.name:SetJustifyH("LEFT");
-        raidEntry.name:SetText(name);
+        raidEntry.name:SetText(raidName);
 
         raidEntry.value = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
         raidEntry.value:SetPoint("RIGHT", -4, 0);
@@ -192,7 +195,8 @@ function HeroicRaidReady:CreateEntries(frame)
             raidEntry.value:SetTextColor(1.0, 0, 0);
         end
 
-        raidEntry.achievementId = achievementId;
+        raidEntry.achievementId = raid.achievementId;
+        raidEntry.raidName = raidName
 
         entries[i] = raidEntry;
         i = i + 1;
@@ -202,8 +206,8 @@ end
 
 function HeroicRaidReady:UpdateEntries()
     for _, raidEntry in pairs(HeroicRaidReady.frame.entries) do
-        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raidEntry.achievementId)
-        raidEntry.name:SetText(name);
+        local _, _, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raidEntry.achievementId)
+        raidEntry.name:SetText(raidEntry.raidName);
         raidEntry.value:SetText(format("%s", wasEarnedByMe and "Ready!" or "Not ready."));
         if (wasEarnedByMe) then
             raidEntry.name:SetTextColor(0, 1.0, 0);

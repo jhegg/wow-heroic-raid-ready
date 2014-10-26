@@ -19,7 +19,7 @@ The raids that are currently tracked are:
   * Dragon Soul
     * Destroyer's End
 * Mists of Pandaria
-  * Mogu'Shan Terrace
+  * Mogu'Shan Vaults
     * Part 2 - The Vault of Mysteries (technically just Will of the Emperor)
   * Heart of Fear
     * Part 2 - Nightmare of Shek'zeer (technically just Grand Empress Shek'zeer)
