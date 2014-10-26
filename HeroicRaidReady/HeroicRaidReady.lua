@@ -189,6 +189,15 @@ function HeroicRaidReady:CreateEntries(frame)
         raidEntry.value:SetPoint("LEFT", raidEntry.name, "RIGHT", 12, 0);
         raidEntry.value:SetJustifyH("RIGHT");
         raidEntry.value:SetText(format("%s", wasEarnedByMe and "Ready!" or "Not ready."));
+
+        if (wasEarnedByMe) then
+            raidEntry.name:SetTextColor(0, 1.0, 0);
+            raidEntry.value:SetTextColor(0, 1.0, 0);
+        else
+            raidEntry.name:SetTextColor(1.0, 0, 0);
+            raidEntry.value:SetTextColor(1.0, 0, 0);
+        end
+
         entries[i] = raidEntry;
         i = i + 1;
     end
