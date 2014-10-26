@@ -1,21 +1,18 @@
 HeroicRaidReady = {
     name = "HeroicRaidReady",
-    NUM_ITEMS = 25,
-    ITEM_HEIGHT,
-    frame = {},
     requiredAchievements = {
         -- Expansion: Wrath of the Lich King
         -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H/25H?
         -- todo And can you just do 25N to access both 10H/25H?
-        4531, -- Icecrown Citadel 10: Storming the Citadel
-        4529, -- Icecrown Citadel 10: The Crimson Hall
-        4527, -- Icecrown Citadel 10: The Frostwing Halls
-        4528, -- Icecrown Citadel 10: The Plagueworks
+        --4531, -- Icecrown Citadel 10: Storming the Citadel
+        --4529, -- Icecrown Citadel 10: The Crimson Hall
+        --4527, -- Icecrown Citadel 10: The Frostwing Hallsy
+        --4528, -- Icecrown Citadel 10: The Plagueworks
         4530, -- Icecrown Citadel 10: The Frozen Throne
-        4604, -- Icecrown Citadel 25: Storming the Citadel
-        4606, -- Icecrown Citadel 25: The Crimson Hall
-        4607, -- Icecrown Citadel 25: The Frostwing Halls
-        4605, -- Icecrown Citadel 25: The Plagueworks
+        --4604, -- Icecrown Citadel 25: Storming the Citadel
+        --4606, -- Icecrown Citadel 25: The Crimson Hall
+        --4607, -- Icecrown Citadel 25: The Frostwing Halls
+        --4605, -- Icecrown Citadel 25: The Plagueworks
         4597, -- Icecrown Citadel 25: The Frozen Throne
         -- todo Eye of Eternity
         -- todo Naxxramas?
@@ -39,7 +36,10 @@ HeroicRaidReady = {
         8071, -- Throne of Thunder: Halls of Flesh-Shaping
         8072, -- Throne of Thunder: Pinnacle of Storms
         -- Siege of Orgrimmar - is not locked
-    }
+    },
+    NUM_ITEMS = 17,
+    ITEM_HEIGHT,
+    frame = {},
 }
 
 SLASH_HEROICRAIDREADY1 = "/heroicraidready";
@@ -73,6 +73,7 @@ function HeroicRaidReady:CreateReadinessFrame()
     frame.header = frame:CreateFontString(nil,"ARTWORK","GameFontHighlight");
     frame.header:SetFont(frame.header:GetFont(),24,"THICKOUTLINE");
     frame.header:SetPoint("TOPLEFT",12,-12);
+    frame.header:SetText(format("%s - By Marihk", HeroicRaidReady.name));
 
     frame.root = frame:CreateFontString(nil,"ARTWORK","GameFontHighlight");
     frame.root:SetFont(frame.header:GetFont(),16,"OUTLINE");
