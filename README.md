@@ -42,3 +42,8 @@ The addon should theoretically work with non-English game clients, but it has no
 achievement IDs and map IDs to get the raid names, so those should be translated automatically, although the 
 'Ready!' and 'Not Ready' text is not currently translated.
 
+## Where can I download official releases of this addon?
+
+* [WoWInterface](http://www.wowinterface.com/downloads/info23231-HeroicRaidReady.html)
+* [Curse](http://www.curse.com/addons/wow/heroicraidready/)
+* [GitHub (development site)](https://github.com/jhegg/wow-heroic-raid-ready/)
