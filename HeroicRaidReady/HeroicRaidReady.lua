@@ -14,7 +14,6 @@ HeroicRaidReady = {
         --4607, -- Icecrown Citadel 25: The Frostwing Halls
         --4605, -- Icecrown Citadel 25: The Plagueworks
         4597, -- Icecrown Citadel 25: The Frozen Throne
-        -- todo Eye of Eternity
         -- todo Naxxramas?
 
         -- Expansion: Cataclysm
