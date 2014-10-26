@@ -1,5 +1,8 @@
 HeroicRaidReady = {
     name = "HeroicRaidReady",
+    NUM_ITEMS = 25,
+    ITEM_HEIGHT,
+    frame = {},
     requiredAchievements = {
         -- Expansion: Wrath of the Lich King
         -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H/25H?
@@ -84,6 +87,8 @@ function HeroicRaidReady:CreateReadinessFrame()
 
     frame.rootFrame = HeroicRaidReady:CreateRootFrame(frame);
 
+    frame.entries = HeroicRaidReady:CreateEntries(frame);
+
     return frame;
 end
 
@@ -136,6 +141,8 @@ function HeroicRaidReady:CreateFrameOutline(frame)
     frame.outline:SetBackdropBorderColor(0.8,0.8,0.9,0.4);
     frame.outline:SetPoint("TOPLEFT",12,-38);
     frame.outline:SetPoint("BOTTOMRIGHT",-12,42);
+    HeroicRaidReady.ITEM_HEIGHT = (frame.outline:GetHeight() - 16) / HeroicRaidReady.NUM_ITEMS - 1;
+    return frame.outline;
 end
 
 function HeroicRaidReady:CreateRootFrame(frame)
@@ -148,6 +155,52 @@ function HeroicRaidReady:CreateRootFrame(frame)
     frame.rootFrame:SetScript("OnEnter",RootFrame_OnEnter);
     frame.rootFrame:SetScript("OnMouseDown",OnMouseDown);
     frame.rootFrame:SetScript("OnMouseUp",OnMouseUp);
+    return frame.rootFrame;
+end
+
+function HeroicRaidReady:CreateEntries(frame)
+    local entries = {};
+    local i = 1;
+    for _,achievementId in pairs(HeroicRaidReady.requiredAchievements) do
+        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(achievementId)
+        -- DEFAULT_CHAT_FRAME:AddMessage(format("%s -- %s", name, wasEarnedByMe and "Ready!" or "Not ready."));
+
+        local raidEntry = CreateFrame("Button", nil, frame.outline);
+
+        raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
+        raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
+        raidEntry:RegisterForClicks("AnyUp");
+        raidEntry:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight");
+        --raidEntry:SetScript("OnClick",Entry_OnClick);
+
+        if (i == 1) then
+            raidEntry:SetPoint("TOPLEFT",8,-8);
+            raidEntry:SetPoint("TOPRIGHT",-8,-8);
+        else
+            raidEntry:SetPoint("TOPLEFT",entries[i - 1],"BOTTOMLEFT",0,-1);
+            raidEntry:SetPoint("TOPRIGHT",entries[i - 1],"BOTTOMRIGHT",0,-1);
+        end
+
+        raidEntry.icon = raidEntry:CreateTexture(nil,"ARTWORK");
+        raidEntry.icon:SetPoint("TOPLEFT");
+        raidEntry.icon:SetPoint("BOTTOMLEFT");
+        raidEntry.icon:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
+        raidEntry.icon:SetTexCoord(0.07,0.93,0.07,0.93);
+
+        raidEntry.name = raidEntry:CreateFontString(nil,"ARTWORK","GameFontNormal");
+        raidEntry.name:SetPoint("LEFT",raidEntry.icon,"RIGHT",4,0);
+        raidEntry.name:SetJustifyH("LEFT");
+        raidEntry.name:SetText(name);
+
+        raidEntry.value = raidEntry:CreateFontString(nil,"ARTWORK","GameFontNormal");
+        raidEntry.value:SetPoint("RIGHT",-4,0);
+        raidEntry.value:SetPoint("LEFT",raidEntry.name,"RIGHT",12,0);
+        raidEntry.value:SetJustifyH("RIGHT");
+        raidEntry.value:SetText(format("%s", wasEarnedByMe and "Ready!" or "Not ready."));
+        entries[i] = raidEntry;
+        i = i + 1;
+    end
+    return entries;
 end
 
 HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
