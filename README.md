@@ -11,7 +11,6 @@ The raids that are currently tracked are:
 * Wrath of the Lich King
   * ICC 10/25
     * todo: figure out if killing the Lich King on 10N grants access to 25H.
-  * todo: does Naxxramas have heroic restrictions?
 * Cataclysm
   * Blackwing Descent
   * The Bastion of Twilight
