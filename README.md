@@ -19,9 +19,8 @@ The raids that are currently tracked are:
   * Dragon Soul
     * Destroyer's End
 * Mists of Pandaria
-  * Mogu'Shan Vaults
-    * Part 1 - Guardians of Mogu'shan
-    * Part 2 - The Vault of Mysteries
+  * Mogu'Shan Terrace
+    * Part 2 - The Vault of Mysteries (technically just Will of the Emperor)
   * Heart of Fear
     * Part 1 - The Dread Approach
     * Part 2 - Nightmare of Shek'zeer
