@@ -49,8 +49,95 @@ end
 function HeroicRaidReady:DisplayHeroicReadiness()
     -- todo Group these by raid
     for _,achievementId in pairs(HeroicRaidReady.requiredAchievements) do
-        local id, name, points, completed, month, day, year, description, flags, icon, rewardText,
-            isGuildAch, wasEarnedByMe, earnedBy = GetAchievementInfo(achievementId)
+        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(achievementId)
         DEFAULT_CHAT_FRAME:AddMessage(format("%s -- %s", name, wasEarnedByMe and "Ready!" or "Not ready."));
     end
+
+    HeroicRaidReady.frame:Show();
 end
+
+function HeroicRaidReady:CreateReadinessFrame()
+    local frame = HeroicRaidReady:CreateMainFrame()
+
+    frame.close = CreateFrame("Button",nil,frame,"UIPanelCloseButton");
+    frame.close:SetPoint("TOPRIGHT", -5, -5);
+    frame.close:SetScript("OnClick", function() frame:Hide() end);
+
+    frame.outline = HeroicRaidReady:CreateFrameOutline(frame);
+
+    frame.header = frame:CreateFontString(nil,"ARTWORK","GameFontHighlight");
+    frame.header:SetFont(frame.header:GetFont(),24,"THICKOUTLINE");
+    frame.header:SetPoint("TOPLEFT",12,-12);
+
+    frame.root = frame:CreateFontString(nil,"ARTWORK","GameFontHighlight");
+    frame.root:SetFont(frame.header:GetFont(),16,"OUTLINE");
+    frame.root:SetPoint("RIGHT",frame.close,"LEFT",-8,-1);
+    frame.root:SetJustifyH("RIGHT");
+
+    frame.rootFrame = HeroicRaidReady:CreateRootFrame(frame);
+
+    return frame;
+end
+
+function HeroicRaidReady:CreateMainFrame()
+    local frame = CreateFrame("Frame", HeroicRaidReady.name, UIParent);
+    frame:SetWidth(520);
+    frame:SetHeight(420);
+    frame:EnableMouse(1);
+    frame:SetMovable(1);
+    frame:SetFrameStrata("HIGH");
+    --HeroicRaidReady.frame:SetTopLevel(1);
+    frame:SetPoint("CENTER");
+    frame:SetBackdrop({
+        bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        tile = 1,
+        tileSize = 16,
+        edgeSize = 16,
+        insets = {
+            left = 3,
+            right = 3,
+            top = 3,
+            bottom = 3
+        }
+    });
+    frame:SetBackdropColor(0,0,0,1);
+    frame:SetBackdropBorderColor(0.1,0.1,0.1,1);
+    frame:Hide();
+    return frame;
+end
+
+function HeroicRaidReady:CreateFrameOutline(frame)
+    frame.outline = CreateFrame("Frame",nil,frame);
+    frame.outline:SetBackdrop({
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        tile = 1,
+        tileSize = 16,
+        edgeSize = 16,
+        insets = {
+            left = 4,
+            right = 4,
+            top = 4,
+            bottom = 4
+        }
+    });
+    frame.outline:SetBackdropColor(0.1,0.1,0.2,1);
+    frame.outline:SetBackdropBorderColor(0.8,0.8,0.9,0.4);
+    frame.outline:SetPoint("TOPLEFT",12,-38);
+    frame.outline:SetPoint("BOTTOMRIGHT",-12,42);
+end
+
+function HeroicRaidReady:CreateRootFrame(frame)
+    frame.rootFrame = CreateFrame("Frame",nil,frame);
+    frame.rootFrame:SetHeight(20);
+    frame.rootFrame:SetPoint("LEFT",frame.root);
+    frame.rootFrame:SetPoint("RIGHT",frame.root);
+    frame.rootFrame:EnableMouse(1);
+    frame.rootFrame:SetScript("OnLeave",function(self) GameTooltip:Hide(); end);
+    frame.rootFrame:SetScript("OnEnter",RootFrame_OnEnter);
+    frame.rootFrame:SetScript("OnMouseDown",OnMouseDown);
+    frame.rootFrame:SetScript("OnMouseUp",OnMouseUp);
+end
+
+HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
