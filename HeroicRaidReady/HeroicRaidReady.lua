@@ -15,9 +15,9 @@ HeroicRaidReady = {
         {achievementId = 6177, mapId = 824}, -- Dragon Soul: Destroyer's End
 
         -- Expansion: Mists of Pandaria
-        {achievementId = 6844, mapId = 896}, -- Mogu'shan Vaults: The Vault of Mysteries
-        {achievementId = 6845, mapId = 897}, -- Heart of Fear: Nightmare of Shek'zeer
-        {achievementId = 6689, mapId = nil}, -- Terrace of Endless Spring
+        {statisticId10 = 6799, statisticId25 = 7926, mapId = 896}, -- Mogu'shan Vaults: Will of the Emperor
+        {statisticId10 = 6811, statisticId25 = 7963, mapId = 897}, -- Heart of Fear: Grand Empress Shek'zeer
+        {statisticId10 = 6819, statisticId25 = 7971, mapId = 886}, -- Terrace of Endless Spring: Sha of Fear
         -- Throne of Thunder - is not locked
         -- Siege of Orgrimmar - is not locked
 
@@ -150,55 +150,75 @@ function HeroicRaidReady:CreateRootFrame(frame)
     return frame.rootFrame;
 end
 
+function HeroicRaidReady:GetRaidInformation(raid)
+    if (raid.achievementId) then
+        local _, achievementName, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raid.achievementId)
+        if (raid.mapId and raid.achievementId) then
+            return GetMapNameByID(raid.mapId).." - "..achievementName, wasEarnedByMe
+        else
+            return achievementName, wasEarnedByMe
+        end
+    else
+        local killsOn10, _, _ = GetStatistic(raid.statisticId10)
+        local killsOn25, _, _ = GetStatistic(raid.statisticId25)
+        local numericKillsOn10 = tonumber(killsOn10)
+        local numericKillsOn25 = tonumber(killsOn25)
+        if ((numericKillsOn10 and numericKillsOn10 > 0) or
+                (numericKillsOn25 and numericKillsOn25 > 0)) then
+            return GetMapNameByID(raid.mapId), true
+        else
+            return GetMapNameByID(raid.mapId), false
+        end
+    end
+end
+
+function HeroicRaidReady:CreateRaidEntry(frame,entries,i,raid)
+    local raidEntry = CreateFrame("Button", nil, frame.outline);
+
+    local raidName, ready = HeroicRaidReady:GetRaidInformation(raid)
+    raidEntry.raid = raid
+
+    raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
+    raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
+    raidEntry:RegisterForClicks("AnyUp");
+    raidEntry:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight");
+
+    if (i == 1) then
+        raidEntry:SetPoint("TOPLEFT", 8, -8);
+        raidEntry:SetPoint("TOPRIGHT", -8, -8);
+    else
+        raidEntry:SetPoint("TOPLEFT", entries[i - 1], "BOTTOMLEFT", 0, -1);
+        raidEntry:SetPoint("TOPRIGHT", entries[i - 1], "BOTTOMRIGHT", 0, -1);
+    end
+
+    raidEntry.name = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
+    raidEntry.name:SetPoint("TOPLEFT");
+    raidEntry.name:SetPoint("BOTTOMLEFT");
+    raidEntry.name:SetJustifyH("LEFT");
+    raidEntry.name:SetText(raidName);
+
+    raidEntry.value = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
+    raidEntry.value:SetPoint("RIGHT", -4, 0);
+    raidEntry.value:SetPoint("LEFT", raidEntry.name, "RIGHT", 12, 0);
+    raidEntry.value:SetJustifyH("RIGHT");
+    raidEntry.value:SetText(format("%s", ready and "Ready!" or "Not ready."));
+
+    if (ready) then
+        raidEntry.name:SetTextColor(0, 1.0, 0);
+        raidEntry.value:SetTextColor(0, 1.0, 0);
+    else
+        raidEntry.name:SetTextColor(1.0, 0, 0);
+        raidEntry.value:SetTextColor(1.0, 0, 0);
+    end
+
+    return raidEntry
+end
+
 function HeroicRaidReady:CreateEntries(frame)
     local entries = {};
     local i = 1;
     for _, raid in pairs(HeroicRaidReady.requiredAchievements) do
-        local _, name, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raid.achievementId)
-        local raidName
-        if (raid.mapId) then
-            raidName = GetMapNameByID(raid.mapId).." - "..name
-        else
-            raidName = name
-        end
-        local raidEntry = CreateFrame("Button", nil, frame.outline);
-        raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
-        raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
-        raidEntry:RegisterForClicks("AnyUp");
-        raidEntry:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight");
-
-        if (i == 1) then
-            raidEntry:SetPoint("TOPLEFT", 8, -8);
-            raidEntry:SetPoint("TOPRIGHT", -8, -8);
-        else
-            raidEntry:SetPoint("TOPLEFT", entries[i - 1], "BOTTOMLEFT", 0, -1);
-            raidEntry:SetPoint("TOPRIGHT", entries[i - 1], "BOTTOMRIGHT", 0, -1);
-        end
-
-        raidEntry.name = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
-        raidEntry.name:SetPoint("TOPLEFT");
-        raidEntry.name:SetPoint("BOTTOMLEFT");
-        raidEntry.name:SetJustifyH("LEFT");
-        raidEntry.name:SetText(raidName);
-
-        raidEntry.value = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
-        raidEntry.value:SetPoint("RIGHT", -4, 0);
-        raidEntry.value:SetPoint("LEFT", raidEntry.name, "RIGHT", 12, 0);
-        raidEntry.value:SetJustifyH("RIGHT");
-        raidEntry.value:SetText(format("%s", wasEarnedByMe and "Ready!" or "Not ready."));
-
-        if (wasEarnedByMe) then
-            raidEntry.name:SetTextColor(0, 1.0, 0);
-            raidEntry.value:SetTextColor(0, 1.0, 0);
-        else
-            raidEntry.name:SetTextColor(1.0, 0, 0);
-            raidEntry.value:SetTextColor(1.0, 0, 0);
-        end
-
-        raidEntry.achievementId = raid.achievementId;
-        raidEntry.raidName = raidName
-
-        entries[i] = raidEntry;
+        entries[i] = HeroicRaidReady:CreateRaidEntry(frame,entries,i,raid)
         i = i + 1;
     end
     return entries;
@@ -206,10 +226,10 @@ end
 
 function HeroicRaidReady:UpdateEntries()
     for _, raidEntry in pairs(HeroicRaidReady.frame.entries) do
-        local _, _, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raidEntry.achievementId)
-        raidEntry.name:SetText(raidEntry.raidName);
-        raidEntry.value:SetText(format("%s", wasEarnedByMe and "Ready!" or "Not ready."));
-        if (wasEarnedByMe) then
+        local raidName, ready = HeroicRaidReady:GetRaidInformation(raidEntry.raid)
+        raidEntry.name:SetText(raidName);
+        raidEntry.value:SetText(format("%s", ready and "Ready!" or "Not ready."));
+        if (ready) then
             raidEntry.name:SetTextColor(0, 1.0, 0);
             raidEntry.value:SetTextColor(0, 1.0, 0);
         else

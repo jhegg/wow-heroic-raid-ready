@@ -5,25 +5,21 @@ A World of Warcraft addon that indicates whether your character is ready for spe
 
 ## What does it do?
 
-HeroicRaidReady checks whether you have completed the achievements required to enter Heroic difficulty raids. 
+HeroicRaidReady checks whether you have completed the achievements or kills required to enter Heroic difficulty raids. 
 Note that only certain raids have entrance restrictions. The raids that are currently tracked are:
 
 * Wrath of the Lich King
-  * ICC 10/25
-    * The Frozen Throne (technically just the Lich King)
+  * ICC 10/25 - The Frozen Throne (technically just the Lich King)
 * Cataclysm
   * Blackwing Descent
   * The Bastion of Twilight
   * Throne of the Four Winds
   * Firelands
-  * Dragon Soul
-    * Destroyer's End
+  * Dragon Soul - Destroyer's End
 * Mists of Pandaria
-  * Mogu'Shan Vaults
-    * Part 2 - The Vault of Mysteries (technically just Will of the Emperor)
-  * Heart of Fear
-    * Part 2 - Nightmare of Shek'zeer (technically just Grand Empress Shek'zeer)
-  * Terrace of Endless Spring
+  * Mogu'Shan Vaults (technically just Will of the Emperor)
+  * Heart of Fear (technically just Grand Empress Shek'zeer)
+  * Terrace of Endless Spring (technically just Sha of Fear)
 
 ## How do I use it?
 
@@ -35,7 +31,7 @@ should show up on the panel/bar.
 
 If you have several alts, you may not know which of those characters are able to enter ICC 25H, for example, without
 attempting to zone in. Or, you might know that such a raid requires a certain achievement, but not remember which
-specific achievement. This addon allows you to quickly and easily check your Heroic Raid Ready status.
+specific achievement or statistic. This addon allows you to quickly and easily check your Heroic Raid Ready status.
 
 ## Language Support
 
