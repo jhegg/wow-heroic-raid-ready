@@ -4,6 +4,7 @@
 ## Author: Marihk
 ## Version: v1.2
 ## OptionalDeps: LibDBIcon-1.0
+## SavedVariables: HeroicRaidReadyCharacterStatus
 
 lib\LibStub\Libstub.lua
 lib\CallbackHandler-1.0\CallbackHandler-1.0.lua
