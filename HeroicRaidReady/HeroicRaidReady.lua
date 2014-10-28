@@ -1,5 +1,9 @@
+local addonName, addonTable = ...
+
 HeroicRaidReady = {
-    name = "HeroicRaidReady",
+    name = addonName,
+    version = GetAddOnMetadata(addonName, "Version"),
+    author = GetAddOnMetadata(addonName, "Author"),
     requiredAchievements = {
         -- Expansion: Wrath of the Lich King
         -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H?
@@ -69,7 +73,7 @@ function HeroicRaidReady:CreateReadinessFrame()
     frame.header = frame:CreateFontString(nil,"ARTWORK","GameFontHighlight");
     frame.header:SetFont(frame.header:GetFont(),24,"THICKOUTLINE");
     frame.header:SetPoint("TOPLEFT",12,-12);
-    frame.header:SetText(format("%s - By Marihk", HeroicRaidReady.name));
+    frame.header:SetText(format("%s %s - By %s", HeroicRaidReady.name, HeroicRaidReady.version, HeroicRaidReady.author));
 
     frame.root = frame:CreateFontString(nil,"ARTWORK","GameFontHighlight");
     frame.root:SetFont(frame.header:GetFont(),16,"OUTLINE");

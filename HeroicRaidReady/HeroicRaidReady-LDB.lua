@@ -16,7 +16,5 @@ function ldb:OnClick(clickedFrame, button)
 end
 
 function ldb:OnTooltipShow()
-    self:AddLine("HeroicRaidReady")
+    self:AddLine(format("%s %s", HeroicRaidReady.name, HeroicRaidReady.version))
 end
-
-HeroicRaidReady.plugin = ldb
