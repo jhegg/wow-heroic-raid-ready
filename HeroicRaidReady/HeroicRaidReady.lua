@@ -33,6 +33,9 @@ HeroicRaidReady = {
     ITEM_HEIGHT,
 }
 
+HeroicRaidReady.addon = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceEvent-3.0")
+local addon = HeroicRaidReady.addon
+
 SLASH_HEROICRAIDREADY1 = "/heroicraidready";
 SLASH_HEROICRAIDREADY2 = "/heroicrr";
 
@@ -41,6 +44,7 @@ SlashCmdList["HEROICRAIDREADY"] = function()
 end
 
 function HeroicRaidReady:DisplayHeroicReadiness()
+    HeroicRaidReady:RefreshAchievementData()
     HeroicRaidReady:UpdateEntries();
     HeroicRaidReady.frame:Show();
 end
@@ -243,4 +247,48 @@ function HeroicRaidReady:UpdateEntries()
     end
 end
 
-HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
+function HeroicRaidReady:RefreshAchievementData()
+    local i = 1
+    for _, theRaid in pairs(HeroicRaidReady.requiredAchievements) do
+
+        print(format("DEBUG: Invoking HeroicRaidReady:GetRaidInformation on %d -- PRE", i)) -- todo remove debug
+
+        if (HeroicRaidReady.db.factionrealm.character[UnitName("player")][i].ready == false) then
+
+            print(format("DEBUG: Invoking HeroicRaidReady:GetRaidInformation on %d -- INNER", i)) -- todo remove debug
+
+
+            local _, isReady = HeroicRaidReady:GetRaidInformation(theRaid)
+            HeroicRaidReady.db.factionrealm.character[UnitName("player")][i] = {
+                raid = theRaid,
+                ready = isReady,
+            }
+            i = i + 1
+        end
+    end
+    HeroicRaidReady.db.factionrealm.character[UnitName("player")].lastUpdate = time()
+end
+
+local function OnPlayerAlive()
+    addon:UnregisterEvent("PLAYER_ALIVE")
+    HeroicRaidReady:RefreshAchievementData()
+end
+
+local function OnPlayerEarningAchievementOrStatisticUpdate()
+    -- todo This might be too spammy, meaning GetRaidInformation() will be called many times.
+    -- todo So, it might be worth optimizing GetRaidInformation() to skip those that are already set to true.
+    HeroicRaidReady:RefreshAchievementData()
+end
+
+function addon:OnInitialize()
+    HeroicRaidReady.db = LibStub("AceDB-3.0"):New("HeroicRaidReadyDB")
+    HeroicRaidReady.db.factionrealm.character = HeroicRaidReady.db.factionrealm.character or {}
+    HeroicRaidReady.db.factionrealm.character[UnitName("player")] =
+        HeroicRaidReady.db.factionrealm.character[UnitName("player")] or {}
+end
+
+function addon:OnEnable()
+    HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
+    addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
+    addon:RegisterEvent("CRITERIA_UPDATE", OnPlayerEarningAchievementOrStatisticUpdate)
+end
