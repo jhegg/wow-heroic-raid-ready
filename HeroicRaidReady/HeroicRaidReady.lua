@@ -1,4 +1,4 @@
-local addonName, addonTable = ...
+local addonName, _ = ...
 
 HeroicRaidReady = {
     name = addonName,
@@ -248,36 +248,52 @@ function HeroicRaidReady:UpdateEntries()
 end
 
 function HeroicRaidReady:RefreshAchievementData()
+    print("DEBUG: Invoking HeroicRaidReady:GetRaidInformation") -- todo remove debug
+
+    local characterData = HeroicRaidReady.db.factionrealm.character[UnitName("player")]
     local i = 1
     for _, theRaid in pairs(HeroicRaidReady.requiredAchievements) do
-
-        print(format("DEBUG: Invoking HeroicRaidReady:GetRaidInformation on %d -- PRE", i)) -- todo remove debug
-
-        if (HeroicRaidReady.db.factionrealm.character[UnitName("player")][i].ready == false) then
-
-            print(format("DEBUG: Invoking HeroicRaidReady:GetRaidInformation on %d -- INNER", i)) -- todo remove debug
-
-
+        characterData[i] = characterData[i] or { ready = false }
+        if (characterData[i].ready == false) then
             local _, isReady = HeroicRaidReady:GetRaidInformation(theRaid)
-            HeroicRaidReady.db.factionrealm.character[UnitName("player")][i] = {
+            characterData[i] = {
                 raid = theRaid,
                 ready = isReady,
             }
-            i = i + 1
         end
+        i = i + 1
     end
     HeroicRaidReady.db.factionrealm.character[UnitName("player")].lastUpdate = time()
 end
 
-local function OnPlayerAlive()
-    addon:UnregisterEvent("PLAYER_ALIVE")
+local function AreAllRaidsReady()
+    local i = 1
+    for _, _ in pairs(HeroicRaidReady.requiredAchievements) do
+        if (HeroicRaidReady.db.factionrealm.character[UnitName("player")][i].ready == false) then
+            return false
+        end
+        i = i + 1
+    end
+end
+
+local function OnPlayerLeavingCombat()
     HeroicRaidReady:RefreshAchievementData()
 end
 
-local function OnPlayerEarningAchievementOrStatisticUpdate()
-    -- todo This might be too spammy, meaning GetRaidInformation() will be called many times.
-    -- todo So, it might be worth optimizing GetRaidInformation() to skip those that are already set to true.
+local function OnPlayerAlive()
+    addon:UnregisterEvent("PLAYER_ALIVE") -- Only fire the first time at login.
     HeroicRaidReady:RefreshAchievementData()
+
+    if (AreAllRaidsReady() == false) then
+        -- Note: this still updates more frequently than I would like, but I can't find a specific enough event
+        -- to either only fire when logging out (that also happens when achievement data is still available), or
+        -- only when a boss dies and not everything else.
+        -- todo Consider limiting this registration until after zoning into a raid instance, and then unregistering when leaving.
+        addon:RegisterEvent("PLAYER_LEAVE_COMBAT", OnPlayerLeavingCombat)
+        addon.registeredForCombatEvents = true
+    else
+        addon.registeredForCombatEvents = false
+    end
 end
 
 function addon:OnInitialize()
@@ -289,6 +305,7 @@ end
 
 function addon:OnEnable()
     HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
-    addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
-    addon:RegisterEvent("CRITERIA_UPDATE", OnPlayerEarningAchievementOrStatisticUpdate)
+    addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive) -- Note: this only fires on login, not from reloading the UI.
+
+    addon.onEnableCalled = true
 end
