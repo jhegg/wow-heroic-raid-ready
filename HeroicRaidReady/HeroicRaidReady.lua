@@ -65,6 +65,8 @@ local function TableLength(T)
     return count
 end
 
+local numberOfAchievements = TableLength(HeroicRaidReady.requiredAchievements)
+
 function HeroicRaidReady:CreateReadinessFrame()
     local frame = HeroicRaidReady:CreateMainFrame()
 
@@ -86,7 +88,7 @@ function HeroicRaidReady:CreateReadinessFrame()
 
     frame.rootFrame = HeroicRaidReady:CreateRootFrame(frame);
 
-    frame.entries = HeroicRaidReady:CreateEntries(frame);
+    frame.entries = HeroicRaidReady:CreateEntryFrames(frame);
 
     return frame;
 end
@@ -140,8 +142,7 @@ function HeroicRaidReady:CreateFrameOutline(frame)
     frame.outline:SetBackdropBorderColor(0.8,0.8,0.9,0.4);
     frame.outline:SetPoint("TOPLEFT",12,-38);
     frame.outline:SetPoint("BOTTOMRIGHT",-12,42);
-    HeroicRaidReady.ITEM_HEIGHT =
-        (frame.outline:GetHeight() - 16) / TableLength(HeroicRaidReady.requiredAchievements) - 1;
+    HeroicRaidReady.ITEM_HEIGHT = (frame.outline:GetHeight() - 16) / numberOfAchievements - 1;
     return frame.outline;
 end
 
@@ -180,12 +181,8 @@ function HeroicRaidReady:GetRaidInformation(raid)
     end
 end
 
-function HeroicRaidReady:CreateRaidEntry(frame,entries,i,raid)
+function HeroicRaidReady:CreateEntryFrame(frame,entries,i)
     local raidEntry = CreateFrame("Button", nil, frame.outline);
-
-    local raidName, ready = HeroicRaidReady:GetRaidInformation(raid)
-    raidEntry.raid = raid
-
     raidEntry:SetWidth(HeroicRaidReady.ITEM_HEIGHT);
     raidEntry:SetHeight(HeroicRaidReady.ITEM_HEIGHT);
     raidEntry:RegisterForClicks("AnyUp");
@@ -203,41 +200,31 @@ function HeroicRaidReady:CreateRaidEntry(frame,entries,i,raid)
     raidEntry.name:SetPoint("TOPLEFT");
     raidEntry.name:SetPoint("BOTTOMLEFT");
     raidEntry.name:SetJustifyH("LEFT");
-    raidEntry.name:SetText(raidName);
 
     raidEntry.value = raidEntry:CreateFontString(nil, "ARTWORK", "GameFontNormal");
     raidEntry.value:SetPoint("RIGHT", -4, 0);
     raidEntry.value:SetPoint("LEFT", raidEntry.name, "RIGHT", 12, 0);
     raidEntry.value:SetJustifyH("RIGHT");
-    raidEntry.value:SetText(format("%s", ready and "Ready!" or "Not ready."));
-
-    if (ready) then
-        raidEntry.name:SetTextColor(0, 1.0, 0);
-        raidEntry.value:SetTextColor(0, 1.0, 0);
-    else
-        raidEntry.name:SetTextColor(1.0, 0, 0);
-        raidEntry.value:SetTextColor(1.0, 0, 0);
-    end
 
     return raidEntry
 end
 
-function HeroicRaidReady:CreateEntries(frame)
+function HeroicRaidReady:CreateEntryFrames(frame)
     local entries = {};
-    local i = 1;
-    for _, raid in pairs(HeroicRaidReady.requiredAchievements) do
-        entries[i] = HeroicRaidReady:CreateRaidEntry(frame,entries,i,raid)
-        i = i + 1;
+    for i=1,numberOfAchievements do
+        entries[i] = HeroicRaidReady:CreateEntryFrame(frame,entries,i)
     end
     return entries;
 end
 
 function HeroicRaidReady:UpdateEntries()
-    for _, raidEntry in pairs(HeroicRaidReady.frame.entries) do
-        local raidName, ready = HeroicRaidReady:GetRaidInformation(raidEntry.raid)
-        raidEntry.name:SetText(raidName);
-        raidEntry.value:SetText(format("%s", ready and "Ready!" or "Not ready."));
-        if (ready) then
+    -- Requires the achievement data to be populated
+    local characterData = HeroicRaidReady.db.factionrealm.character[UnitName("player")]
+    for i=1,numberOfAchievements do
+        local raidEntry = HeroicRaidReady.frame.entries[i]
+        raidEntry.name:SetText(characterData[i].raidName)
+        raidEntry.value:SetText(format("%s", characterData[i].ready and "Ready!" or "Not ready."));
+        if (characterData[i].ready) then
             raidEntry.name:SetTextColor(0, 1.0, 0);
             raidEntry.value:SetTextColor(0, 1.0, 0);
         else
@@ -255,9 +242,10 @@ function HeroicRaidReady:RefreshAchievementData()
     for _, theRaid in pairs(HeroicRaidReady.requiredAchievements) do
         characterData[i] = characterData[i] or { ready = false }
         if (characterData[i].ready == false) then
-            local _, isReady = HeroicRaidReady:GetRaidInformation(theRaid)
+            local raidName, isReady = HeroicRaidReady:GetRaidInformation(theRaid)
             characterData[i] = {
                 raid = theRaid,
+                raidName = raidName,
                 ready = isReady,
             }
         end
