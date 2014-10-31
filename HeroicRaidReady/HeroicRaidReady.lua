@@ -55,11 +55,11 @@ function HeroicRaidReady:SwitchCharacter(name)
     HeroicRaidReady:UpdateEntries();
 end
 
-local function OnMouseDown(self,button)
+local function OnMouseDown(_,_)
     HeroicRaidReady.frame:StartMoving();
 end
 
-local function OnMouseUp(self,button)
+local function OnMouseUp(_,_)
     HeroicRaidReady.frame:StopMovingOrSizing();
 end
 
@@ -95,7 +95,7 @@ local function CreateCharacterNameDropDown(frame)
     UIDropDownMenu_SetWidth(frame.dropDown, 150)
     UIDropDownMenu_SetText(frame.dropDown, "Select Character...")
 
-    UIDropDownMenu_Initialize(frame.dropDown, function(self, level, menuList)
+    UIDropDownMenu_Initialize(frame.dropDown, function(_, level, _)
         local info = UIDropDownMenu_CreateInfo()
         local names, _ = GetCharacterNamesFromDb()
         for _, name in pairs(names) do
@@ -195,7 +195,7 @@ function HeroicRaidReady:CreateRootFrame(frame)
     frame.rootFrame:SetPoint("LEFT",frame.root);
     frame.rootFrame:SetPoint("RIGHT",frame.root);
     frame.rootFrame:EnableMouse(1);
-    frame.rootFrame:SetScript("OnLeave",function(self) GameTooltip:Hide(); end);
+    frame.rootFrame:SetScript("OnLeave",function(_) GameTooltip:Hide(); end);
     frame.rootFrame:SetScript("OnEnter",RootFrame_OnEnter);
     frame.rootFrame:SetScript("OnMouseDown",OnMouseDown);
     frame.rootFrame:SetScript("OnMouseUp",OnMouseUp);
@@ -278,8 +278,6 @@ function HeroicRaidReady:UpdateEntries()
 end
 
 function HeroicRaidReady:RefreshAchievementData()
-    print("DEBUG: Invoking HeroicRaidReady:GetRaidInformation") -- todo remove debug
-
     local characterData = HeroicRaidReady.db.factionrealm.character[UnitName("player")]
     local i = 1
     for _, theRaid in pairs(HeroicRaidReady.requiredAchievements) do
@@ -319,7 +317,6 @@ local function OnPlayerAlive()
         -- Note: this still updates more frequently than I would like, but I can't find a specific enough event
         -- to either only fire when logging out (that also happens when achievement data is still available), or
         -- only when a boss dies and not everything else.
-        -- todo Consider limiting this registration until after zoning into a raid instance, and then unregistering when leaving.
         addon:RegisterEvent("PLAYER_LEAVE_COMBAT", OnPlayerLeavingCombat)
     end
 end
