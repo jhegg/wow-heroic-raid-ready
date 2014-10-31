@@ -86,7 +86,7 @@ end
 local function CharacterNameDropDown_OnClick(self, arg1, arg2, checked)
     HeroicRaidReady.selectedCharacter = arg1
     UIDropDownMenu_SetText(HeroicRaidReady.frame.dropDown, arg1)
-    -- todo update entries
+    HeroicRaidReady:UpdateEntries();
 end
 
 local function CreateCharacterNameDropDown(frame)
