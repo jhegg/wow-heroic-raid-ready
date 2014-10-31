@@ -83,7 +83,7 @@ local function GetCharacterNamesFromDb()
     return names, numberOfNames
 end
 
-local function CharacterNameDropDown_OnClick(self, arg1, arg2, checked)
+local function CharacterNameDropDown_OnClick(_, arg1, _, _)
     HeroicRaidReady.selectedCharacter = arg1
     UIDropDownMenu_SetText(HeroicRaidReady.frame.dropDown, arg1)
     HeroicRaidReady:UpdateEntries();
