@@ -2,7 +2,7 @@
 ## Title: HeroicRaidReady
 ## Notes: Shows which raids your character can enter on Heroic difficulty (/heroicrr).
 ## Author: Marihk
-## Version: v1.2
+## Version: v1.3
 ## OptionalDeps: LibDBIcon-1.0
 ## SavedVariables: HeroicRaidReadyDB
 
