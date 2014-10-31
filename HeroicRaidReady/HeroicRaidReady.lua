@@ -6,8 +6,7 @@ HeroicRaidReady = {
     author = GetAddOnMetadata(addonName, "Author"),
     requiredAchievements = {
         -- Expansion: Wrath of the Lich King
-        -- todo For ICC, do you only need to kill Arthas on 10N, to access 10H?
-        -- We found out that you must do 25N to do 25H, and 10N to do 10H, they are separate lockouts.
+        -- We found out that you must do 25N to do 25H, and 10N to do 10H; they are separate lockouts.
         {achievementId = 4530, mapId = 604}, -- Icecrown Citadel 10: The Frozen Throne
         {achievementId = 4597, mapId = 604}, -- Icecrown Citadel 25: The Frozen Throne
 
