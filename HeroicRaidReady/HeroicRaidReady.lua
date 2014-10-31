@@ -31,6 +31,7 @@ HeroicRaidReady = {
     },
     frame = {},
     ITEM_HEIGHT,
+    selectedCharacter,
 }
 
 HeroicRaidReady.addon = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceEvent-3.0")
@@ -47,6 +48,11 @@ function HeroicRaidReady:DisplayHeroicReadiness()
     HeroicRaidReady:RefreshAchievementData()
     HeroicRaidReady:UpdateEntries();
     HeroicRaidReady.frame:Show();
+end
+
+function HeroicRaidReady:SwitchCharacter(name)
+    HeroicRaidReady.selectedCharacter = name
+    HeroicRaidReady:UpdateEntries();
 end
 
 local function OnMouseDown(self,button)
@@ -67,8 +73,45 @@ end
 
 local numberOfAchievements = TableLength(HeroicRaidReady.requiredAchievements)
 
+local function GetCharacterNamesFromDb()
+    local names = {}
+    local numberOfNames = 0
+    for characterName in pairs(HeroicRaidReady.db.factionrealm.character) do
+        numberOfNames = numberOfNames + 1
+        names[numberOfNames] = characterName
+    end
+    return names, numberOfNames
+end
+
+local function CharacterNameDropDown_OnClick(self, arg1, arg2, checked)
+    HeroicRaidReady.selectedCharacter = arg1
+    UIDropDownMenu_SetText(HeroicRaidReady.frame.dropDown, arg1)
+    -- todo update entries
+end
+
+local function CreateCharacterNameDropDown(frame)
+    frame.dropDown = CreateFrame("Frame", "HeroicRaidReadyDropDown", frame, "UIDropDownMenuTemplate")
+    frame.dropDown:SetPoint("BOTTOMLEFT", 0, 6)
+    UIDropDownMenu_SetWidth(frame.dropDown, 150)
+    UIDropDownMenu_SetText(frame.dropDown, "Select Character...")
+
+    UIDropDownMenu_Initialize(frame.dropDown, function(self, level, menuList)
+        local info = UIDropDownMenu_CreateInfo()
+        local names, _ = GetCharacterNamesFromDb()
+        for _, name in pairs(names) do
+            info.text = name
+            info.arg1 = name
+            info.checked = name == HeroicRaidReady.selectedCharacter
+            info.func = CharacterNameDropDown_OnClick
+            UIDropDownMenu_AddButton(info, level)
+        end
+    end)
+end
+
 function HeroicRaidReady:CreateReadinessFrame()
     local frame = HeroicRaidReady:CreateMainFrame()
+
+    CreateCharacterNameDropDown(frame)
 
     frame.close = CreateFrame("Button",nil,frame,"UIPanelCloseButton");
     frame.close:SetPoint("TOPRIGHT", -5, -5);
@@ -219,7 +262,7 @@ end
 
 function HeroicRaidReady:UpdateEntries()
     -- Requires the achievement data to be populated
-    local characterData = HeroicRaidReady.db.factionrealm.character[UnitName("player")]
+    local characterData = HeroicRaidReady.db.factionrealm.character[HeroicRaidReady.selectedCharacter]
     for i=1,numberOfAchievements do
         local raidEntry = HeroicRaidReady.frame.entries[i]
         raidEntry.name:SetText(characterData[i].raidName)
@@ -278,9 +321,6 @@ local function OnPlayerAlive()
         -- only when a boss dies and not everything else.
         -- todo Consider limiting this registration until after zoning into a raid instance, and then unregistering when leaving.
         addon:RegisterEvent("PLAYER_LEAVE_COMBAT", OnPlayerLeavingCombat)
-        addon.registeredForCombatEvents = true
-    else
-        addon.registeredForCombatEvents = false
     end
 end
 
@@ -289,11 +329,10 @@ function addon:OnInitialize()
     HeroicRaidReady.db.factionrealm.character = HeroicRaidReady.db.factionrealm.character or {}
     HeroicRaidReady.db.factionrealm.character[UnitName("player")] =
         HeroicRaidReady.db.factionrealm.character[UnitName("player")] or {}
+    HeroicRaidReady.selectedCharacter = UnitName("player")
 end
 
 function addon:OnEnable()
     HeroicRaidReady.frame = HeroicRaidReady:CreateReadinessFrame();
     addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive) -- Note: this only fires on login, not from reloading the UI.
-
-    addon.onEnableCalled = true
 end
