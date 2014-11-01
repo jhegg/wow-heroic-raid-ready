@@ -136,7 +136,8 @@ function HeroicRaidReady:CreateReadinessFrame()
 end
 
 function HeroicRaidReady:CreateMainFrame()
-    local frame = CreateFrame("Frame", HeroicRaidReady.name, UIParent);
+    local frame = CreateFrame("Frame", "HeroicRaidReadyMainFrame", UIParent);
+    table.insert(UISpecialFrames, "HeroicRaidReadyMainFrame") -- Allow the frame to be closed by the ESC key.
     frame:SetWidth(520);
     frame:SetHeight(420);
     frame:EnableMouse(1);
