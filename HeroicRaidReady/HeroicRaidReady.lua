@@ -84,25 +84,25 @@ end
 
 local function CharacterNameDropDown_OnClick(_, arg1, _, _)
     HeroicRaidReady.selectedCharacter = arg1
-    UIDropDownMenu_SetText(HeroicRaidReady.frame.dropDown, arg1)
+    Lib_UIDropDownMenu_SetText(HeroicRaidReady.frame.dropDown, arg1)
     HeroicRaidReady:UpdateEntries();
 end
 
 local function CreateCharacterNameDropDown(frame)
-    frame.dropDown = CreateFrame("Frame", "HeroicRaidReadyDropDown", frame, "UIDropDownMenuTemplate")
+    frame.dropDown = CreateFrame("Frame", "HeroicRaidReadyDropDown", frame, "Lib_UIDropDownMenuTemplate")
     frame.dropDown:SetPoint("BOTTOMLEFT", 0, 6)
-    UIDropDownMenu_SetWidth(frame.dropDown, 150)
-    UIDropDownMenu_SetText(frame.dropDown, "Select Character...")
+    Lib_UIDropDownMenu_SetWidth(frame.dropDown, 150)
+    Lib_UIDropDownMenu_SetText(frame.dropDown, "Select Character...")
 
-    UIDropDownMenu_Initialize(frame.dropDown, function(_, level, _)
-        local info = UIDropDownMenu_CreateInfo()
+    Lib_UIDropDownMenu_Initialize(frame.dropDown, function(_, level, _)
+        local info = Lib_UIDropDownMenu_CreateInfo()
         local names, _ = GetCharacterNamesFromDb()
         for _, name in pairs(names) do
             info.text = name
             info.arg1 = name
             info.checked = name == HeroicRaidReady.selectedCharacter
             info.func = CharacterNameDropDown_OnClick
-            UIDropDownMenu_AddButton(info, level)
+            Lib_UIDropDownMenu_AddButton(info, level)
         end
     end)
 end
