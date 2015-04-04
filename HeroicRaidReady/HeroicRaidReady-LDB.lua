@@ -16,5 +16,15 @@ function ldb:OnClick(clickedFrame, button)
 end
 
 function ldb:OnTooltipShow()
-    self:AddLine(format("%s %s", HeroicRaidReady.name, HeroicRaidReady.version))
+  self:AddLine(format("%s %s", HeroicRaidReady.name, HeroicRaidReady.version))
+  self:AddLine("------------------------------")
+  self:AddLine(UnitName("player"))
+  local characterData = HeroicRaidReady.db.factionrealm.character[UnitName("player")]
+  for raid = 1, HeroicRaidReady.numberOfAchievements do
+    if characterData[raid].ready then
+      self:AddLine(format("   |cFF00FF00%s - Ready!|r", characterData[raid].raidName))
+    else
+      self:AddLine(format("   |cFFFF0000%s - Not Ready|r", characterData[raid].raidName))
+    end
+  end
 end
