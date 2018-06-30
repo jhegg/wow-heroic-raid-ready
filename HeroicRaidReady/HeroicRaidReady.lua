@@ -1,5 +1,9 @@
 local addonName, _ = ...
 
+local function GetMapName(worldMapAreaId, uiMapId)
+  return GetMapNameByID and GetMapNameByID(worldMapAreaId) or C_Map.GetMapInfo(uiMapId).name
+end
+
 HeroicRaidReady = {
     name = addonName,
     version = GetAddOnMetadata(addonName, "Version"),
@@ -7,20 +11,20 @@ HeroicRaidReady = {
     requiredAchievements = {
         -- Expansion: Wrath of the Lich King
         -- We found out that you must do 25N to do 25H, and 10N to do 10H; they are separate lockouts.
-        {achievementId = 4530, mapId = 604}, -- Icecrown Citadel 10: The Frozen Throne
-        {achievementId = 4597, mapId = 604}, -- Icecrown Citadel 25: The Frozen Throne
+        {achievementId = 4530, mapName = GetMapName(604, 186)}, -- Icecrown Citadel 10: The Frozen Throne
+        {achievementId = 4597, mapName = GetMapName(604, 186)}, -- Icecrown Citadel 25: The Frozen Throne
 
         -- Expansion: Cataclysm
-        {achievementId = 4842, mapId = nil}, -- Blackwing Descent
-        {achievementId = 4850, mapId = nil}, -- Bastion of Twilight
-        {achievementId = 4851, mapId = nil}, -- Throne of the Four Winds
-        {achievementId = 5802, mapId = nil}, -- Firelands
-        {achievementId = 6177, mapId = 824}, -- Dragon Soul: Destroyer's End
+        {achievementId = 4842, mapName = nil}, -- Blackwing Descent
+        {achievementId = 4850, mapName = nil}, -- Bastion of Twilight
+        {achievementId = 4851, mapName = nil}, -- Throne of the Four Winds
+        {achievementId = 5802, mapName = nil}, -- Firelands
+        {achievementId = 6177, mapName = GetMapName(824, 409)}, -- Dragon Soul: Destroyer's End
 
         -- Expansion: Mists of Pandaria
-        {statisticId10 = 6799, statisticId25 = 7926, mapId = 896}, -- Mogu'shan Vaults: Will of the Emperor
-        {statisticId10 = 6811, statisticId25 = 7963, mapId = 897}, -- Heart of Fear: Grand Empress Shek'zeer
-        {statisticId10 = 6819, statisticId25 = 7971, mapId = 886}, -- Terrace of Endless Spring: Sha of Fear
+        {statisticId10 = 6799, statisticId25 = 7926, mapName = GetMapName(896, 471)}, -- Mogu'shan Vaults: Will of the Emperor
+        {statisticId10 = 6811, statisticId25 = 7963, mapName = GetMapName(897, 474)}, -- Heart of Fear: Grand Empress Shek'zeer
+        {statisticId10 = 6819, statisticId25 = 7971, mapName = GetMapName(886, 456)}, -- Terrace of Endless Spring: Sha of Fear
         -- Throne of Thunder - is not locked
         -- Siege of Orgrimmar - is not locked
 
@@ -78,8 +82,8 @@ end
 function HeroicRaidReady:GetRaidInformation(raid)
     if (raid.achievementId) then
         local _, achievementName, _, _, _, _, _, _, _, _, _, _, wasEarnedByMe, _ = GetAchievementInfo(raid.achievementId)
-        if (raid.mapId and raid.achievementId) then
-            return GetMapNameByID(raid.mapId).." - "..achievementName, wasEarnedByMe
+        if (raid.mapName and raid.achievementId) then
+            return raid.mapName.." - "..achievementName, wasEarnedByMe
         else
             return achievementName, wasEarnedByMe
         end
@@ -90,9 +94,9 @@ function HeroicRaidReady:GetRaidInformation(raid)
         local numericKillsOn25 = tonumber(killsOn25)
         if ((numericKillsOn10 and numericKillsOn10 > 0) or
                 (numericKillsOn25 and numericKillsOn25 > 0)) then
-            return GetMapNameByID(raid.mapId), true
+            return raid.mapName, true
         else
-            return GetMapNameByID(raid.mapId), false
+            return raid.mapName, false
         end
     end
 end

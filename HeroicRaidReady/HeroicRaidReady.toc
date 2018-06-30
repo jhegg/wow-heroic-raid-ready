@@ -1,8 +1,8 @@
-## Interface: 70000
+## Interface: 80000
 ## Title: HeroicRaidReady
 ## Notes: Shows which raids your character can enter on Heroic difficulty (/heroicrr).
 ## Author: Marihk
-## Version: v1.6
+## Version: v1.7
 ## OptionalDeps: LibDBIcon-1.0
 ## SavedVariables: HeroicRaidReadyDB
 
@@ -13,8 +13,7 @@ lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 lib\AceAddon-3.0\AceAddon-3.0.xml
 lib\AceEvent-3.0\AceEvent-3.0.xml
 lib\AceDB-3.0\AceDB-3.0.xml
-lib\DropDownMenu-1.1\UIDropDownMenuTemplates.xml
-lib\DropDownMenu-1.1\UIDropDownMenu.lua
+lib\LibUIDropDownMenu\LibUIDropDownMenu.xml
 
 HeroicRaidReady.lua
 HeroicRaidReady-LDB.lua
